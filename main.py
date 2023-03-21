@@ -1,16 +1,26 @@
-# This is a sample Python script.
+from bs4 import BeautifulSoup
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+with open("input.xml") as f_inp:
+    soup = BeautifulSoup(f_inp.read(), "lxml")
+
+data = soup.data
+# proc_num = int(data.processors_num.text)
+proc_limits = [int(tag.text) for tag in data.processors.find_all("limit")]
+# prog_num = int(data.programs_num.text)
+prog_cap = [int(tag.text) for tag in data.programs.find_all("capacity")]
+links = [(int(tag.first.text), int(tag.second.text), int(tag.load.text)) for tag in data.networks.find_all("netlink")]
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+print(proc_limits)
+print(prog_cap)
+print(links)
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+
+
+
+
+
+
+
