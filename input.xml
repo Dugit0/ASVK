@@ -1,5 +1,5 @@
 <data>
-<!--    <processors_num>4</processors_num>-->
+    <!--    <processors_num>4</processors_num>-->
     <processors>
         <limit>10</limit>
         <limit>10</limit>
@@ -7,7 +7,7 @@
         <limit>10</limit>
         <error_tag>1000000</error_tag>
     </processors>
-<!--    <programs_num>3</programs_num>-->
+    <!--    <programs_num>3</programs_num>-->
     <programs>
         <capacity>5</capacity>
         <capacity>5</capacity>
