@@ -11,7 +11,7 @@ def gen_rand():
     global proc_limits, prog_cap, links
     global possible_limits, possible_cap, possible_load
 
-    proc_num = 4
+    proc_num = 8
     prog_num = proc_num * 8
 
     cur_sum_lim = 0
@@ -46,6 +46,17 @@ def gen_rand():
 
     return proc_limits, prog_cap, links
 
+
+def check_all_param(real, possible):
+    ans = True
+    check_list = {i: False for i in possible}
+    for i in real:
+        check_list[i] = True
+    for key in possible:
+        ans = ans and check_list[key]
+    return ans
+
+
 def check():
     global proc_num, prog_num, links_num
     global proc_limits, prog_cap, links
@@ -53,19 +64,35 @@ def check():
 
     cond1 = ((prog_num / proc_num) >= 8)
     cond2 = ((sum(prog_cap) / proc_num) >= 50)
+
     set_links = set()
     for link in links:
         set_links.add((link[0], link[1]))
     assert len(set_links) == len(links)
-    check_links = {i: 0 for i in range(prog_num)}
-    check_limits = {i: False for i in possible_limits}
-    check_cap = {i: False for i in possible_cap}
+
+    cond3 = True
+    check_links = [0] * prog_num
+    for link in links:
+        check_links[link[0]] += 1
+        check_links[link[1]] += 1
+    for prog in range(prog_num):
+        if check_links[prog] < 2:
+            cond3 = False
+
+    cond4 = check_all_param(proc_limits, possible_limits)
+    cond5 = check_all_param(prog_cap, possible_cap)
+    cond6 = check_all_param([link[2] for link in links], possible_load)
+    return cond1 and cond2 and cond3 and cond4 and cond5 and cond6
 
 
+try_count = 0
+while True:
+    gen_rand()
+    try_count += 1
+    if check():
+        break
 
-gen_rand()
-check()
-
+print(f"-------- {try_count} tries --------")
 print("-------- proc --------")
 print(proc_num)
 print(proc_limits)
