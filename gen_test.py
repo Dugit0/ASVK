@@ -11,7 +11,7 @@ def gen_rand():
     global proc_limits, prog_cap, links
     global possible_limits, possible_cap, possible_load
 
-    proc_num = 8
+    proc_num = 16
     prog_num = proc_num * 8
 
     cur_sum_lim = 0
@@ -62,8 +62,11 @@ def check():
     global proc_limits, prog_cap, links
     global possible_limits, possible_cap, possible_load
 
+    conditions = []
     cond1 = ((prog_num / proc_num) >= 8)
+    conditions.append(cond1)
     cond2 = ((sum(prog_cap) / proc_num) >= 50)
+    conditions.append(cond2)
 
     set_links = set()
     for link in links:
@@ -78,11 +81,62 @@ def check():
     for prog in range(prog_num):
         if check_links[prog] < 2:
             cond3 = False
+    conditions.append(cond3)
 
     cond4 = check_all_param(proc_limits, possible_limits)
+    conditions.append(cond4)
     cond5 = check_all_param(prog_cap, possible_cap)
+    conditions.append(cond5)
     cond6 = check_all_param([link[2] for link in links], possible_load)
-    return cond1 and cond2 and cond3 and cond4 and cond5 and cond6
+    conditions.append(cond6)
+
+    my_cond1 = ((sum(proc_limits) - sum(prog_cap)) > 60)
+    # print(sum(proc_limits) - sum(prog_cap))
+    # my_cond1 = ((sum(prog_cap) / proc_num) <= 76)
+    conditions.append(my_cond1)
+    ans = True
+    for cond in conditions:
+        ans = ans and cond
+    return ans
+
+
+def create_tree():
+    global proc_num, prog_num, links_num
+    global proc_limits, prog_cap, links
+    soup = BeautifulSoup()
+    soup.append(soup.new_tag("data"))
+
+    processors = soup.new_tag("processors")
+    for lim in proc_limits:
+        limit = soup.new_tag("limit")
+        limit.string = f"{lim}"
+        processors.append(limit)
+    soup.data.append(processors)
+
+    programs = soup.new_tag("programs")
+    for cap in prog_cap:
+        capacity = soup.new_tag("capacity")
+        capacity.string = f"{cap}"
+        programs.append(capacity)
+    soup.data.append(programs)
+
+    networks = soup.new_tag("networks")
+    for link in links:
+        netlink = soup.new_tag("netlink")
+        first = soup.new_tag("first")
+        first.string = str(link[0])
+        second = soup.new_tag("second")
+        second.string = str(link[1])
+        load = soup.new_tag("load")
+        load.string = str(link[2])
+        netlink.append(first)
+        netlink.append(second)
+        netlink.append(load)
+        networks.append(netlink)
+    soup.data.append(networks)
+    return soup
+
+
 
 
 try_count = 0
@@ -92,18 +146,22 @@ while True:
     if check():
         break
 
-print(f"-------- {try_count} tries --------")
-print("-------- proc --------")
-print(proc_num)
-print(proc_limits)
-print(f"sum limit = {sum(proc_limits)}")
+tree = create_tree()
+with open("test_out.xml", "w") as f_out:
+    print(tree.prettify(), file=f_out)
 
-print("-------- prog --------")
-print(len(prog_cap))
-print(prog_cap)
-print(f"sum cap = {sum(prog_cap)}")
-
-print("-------- links --------")
-print(len(links))
-for link in links:
-    print(link)
+# print(f"-------- {try_count} tries --------")
+# print("-------- proc --------")
+# print(proc_num)
+# print(proc_limits)
+# print(f"sum limit = {sum(proc_limits)}")
+#
+# print("-------- prog --------")
+# print(len(prog_cap))
+# print(prog_cap)
+# print(f"sum cap = {sum(prog_cap)}")
+#
+# print("-------- links --------")
+# print(len(links))
+# for link in links:
+#     print(link)

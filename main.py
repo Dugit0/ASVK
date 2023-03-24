@@ -1,6 +1,10 @@
 from bs4 import BeautifulSoup
 import random
 
+FILE = "input.xml"
+# "test_out.xml"
+MAX_STEPS = 5000 * 100
+
 
 def find_load(solution, links):
     ans = 0
@@ -10,6 +14,7 @@ def find_load(solution, links):
         if solution[first_prog] != solution[second_prog]:
             ans += link[2]
     return ans
+
 
 def cheсk(solution, proc_limits, prog_cap):
     proc_num = len(proc_limits)
@@ -22,7 +27,8 @@ def cheсk(solution, proc_limits, prog_cap):
             return False
     return True
 
-with open("input.xml") as f_inp:
+
+with open(FILE) as f_inp:
     soup = BeautifulSoup(f_inp.read(), "lxml")
 
 data = soup.data
@@ -37,11 +43,11 @@ links = [(int(tag.first.text), int(tag.second.text), int(tag.load.text)) for tag
 
 print("proc_limits :", proc_limits)
 print("prog_cap :", prog_cap)
-print("links :", links)
+# print("links :", links)
 
 best_load = sum(map(lambda a: a[2], links))
 best_solution = [-1] * prog_num
-print(f"best_load = {best_load}")
+# print(f"best_load = {best_load}")
 
 count_steps = 0
 flag_success = False
@@ -54,7 +60,7 @@ while True:
         best_solution = new_solution.copy()
 
     count_steps += 1
-    if best_load == 0 or count_steps >= 5000:
+    if best_load == 0 or count_steps >= MAX_STEPS:
         break
 
 if flag_success:
@@ -65,9 +71,3 @@ if flag_success:
 else:
     print("failure")
     print(count_steps)
-
-
-
-
-
-
