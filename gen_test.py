@@ -11,7 +11,7 @@ def gen_rand():
     global proc_limits, prog_cap, links
     global possible_limits, possible_cap, possible_load
 
-    proc_num = 16
+    proc_num = 8
     prog_num = proc_num * 8
 
     cur_sum_lim = 0

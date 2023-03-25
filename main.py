@@ -28,7 +28,7 @@ def cheсk(solution, proc_limits, prog_cap):
     return True
 
 
-with open(FILE) as f_inp:
+with open(FILE, encoding="utf-8") as f_inp:
     soup = BeautifulSoup(f_inp.read(), "lxml")
 
 data = soup.data

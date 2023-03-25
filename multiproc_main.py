@@ -70,7 +70,7 @@ def solve_problem(proc_limits, prog_cap, links):
 
 if __name__ == "__main__":
 
-    with open(FILE) as f_inp:
+    with open(FILE, encoding="utf-8") as f_inp:
         soup = BeautifulSoup(f_inp.read(), "lxml")
     data = soup.data
     proc_limits = [int(tag.text) for tag in data.processors.find_all("limit")]
