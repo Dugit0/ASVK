@@ -6,7 +6,7 @@ import os
 # FILE = "test_out.xml"
 tests = "tests"
 
-server = xmlrpc.client.ServerProxy('http://localhost:9000')
+server = xmlrpc.client.ServerProxy('http://myserver:9000')
 for test in os.listdir(tests):
     path_test = os.path.join(tests, test)
     with open(path_test, encoding="utf-8") as f_inp:

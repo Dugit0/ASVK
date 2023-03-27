@@ -1,6 +1,5 @@
 from xmlrpc.server import SimpleXMLRPCServer
 from xmlrpc.server import SimpleXMLRPCRequestHandler
-from bs4 import BeautifulSoup
 import random
 
 MAX_STEPS = 5000
@@ -63,9 +62,7 @@ class RequestHandler(SimpleXMLRPCRequestHandler):
     rpc_paths = ('/RPC2',)
 
 
-with SimpleXMLRPCServer(('localhost', 9000),
+with SimpleXMLRPCServer(('0.0.0.0', 9000),
                         requestHandler=RequestHandler) as server:
-    # server.register_introspection_functions()
     server.register_function(solve)
-
     server.serve_forever()
