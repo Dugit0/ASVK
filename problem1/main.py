@@ -155,4 +155,3 @@ else:
     print("failure")
     print(global_count_steps)
 
-gen_random_solution(proc_limits, prog_cap)

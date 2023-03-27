@@ -1,0 +1,49 @@
+1. Подготовка перед запуском программы
+Для запуска программы необходимы пакеты, указанные в файле requirements.txt.
+Их можно установить командой:
+pip install -r requirements.txt
+Запуск программы осуществляется командой:
+python multiproc_main.py
+При тестировании программы использовался Python 3.10.10.
+
+2. Запуск и тестирование
+Путь до файла с тестом указывается в переменной FILE в 6 строке файла multiproc_main.py.
+Количество процессов указывается в переменной PROCESS_NUM в 8 строке файла multiproc_main.py.
+Путь может быть абсюлютным или относительным.
+
+3. Формат входного файла
+<data>
+    <processors>
+        <limit>70</limit>
+        <limit>100</limit>
+        ...
+    </processors>
+    <programs>
+        <capacity>20</capacity>
+        <capacity>5</capacity>
+        <capacity>5</capacity>
+        ...
+    </programs>
+    <networks>
+        <netlink>
+            <first>0</first>
+            <second>1</second>
+            <load>50</load>
+        </netlink>
+        <netlink>
+            <first>1</first>
+            <second>2</second>
+            <load>10</load>
+        </netlink>
+        ...
+    </networks>
+</data>
+
+В теге data содержатся 3 тега: processors, programs, networks.
+Тег processors содержит теги limit, каждый из которых хранит в себе ровно одно число - предельную загрузку процессора.
+Тег programs содержит теги capacity, каждый из которых хранит в себе ровно одно число - нагрузку программы на процессор.
+Тег networks содержит теги netlink, каждый из которых хранит в себе 3 тега:
+    - first - номер первой программы, которая ведет обмен данными
+    - second - номер второй программы, которая ведет обмен данными
+    - load - нагрузка на сеть, которую они создают
+

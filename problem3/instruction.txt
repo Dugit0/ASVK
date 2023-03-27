@@ -1,0 +1,16 @@
+Инструкция по демонстрации решения на сайте https://labs.play-with-docker.com/
+Для демонстрации решения необходимо запустить следующие команды:
+
+echo "FROM dugit0/server:v01" > dockerfile
+docker build -t server_im .
+echo "FROM dugit0/client:v01" > dockerfile
+docker build -t client_im .
+docker network create -d bridge mynetwork
+docker run --rm -d --name myserver --net mynetwork server_im
+docker run --rm -it --name myclient --net mynetwork client_im /bin/bash
+
+После запуска контейнера клиента в режиме -it необходимо запустить команду:
+python client.py
+
+Прикладываю исходный код программ, docker-файлов и команд для запуска.
+
