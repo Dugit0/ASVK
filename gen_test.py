@@ -11,7 +11,7 @@ def gen_rand():
     global proc_limits, prog_cap, links
     global possible_limits, possible_cap, possible_load
 
-    proc_num = 4
+    proc_num = 16
     prog_num = proc_num * 8
 
     cur_sum_lim = 0
@@ -90,10 +90,10 @@ def check():
     cond6 = check_all_param([link[2] for link in links], possible_load)
     conditions.append(cond6)
 
-    # my_cond1 = ((sum(proc_limits) - sum(prog_cap)) > 60)
+    my_cond1 = ((sum(proc_limits) - sum(prog_cap)) > 60)
     # print(sum(proc_limits) - sum(prog_cap))
     # my_cond1 = ((sum(prog_cap) / proc_num) <= 76)
-    # conditions.append(my_cond1)
+    conditions.append(my_cond1)
     ans = True
     for cond in conditions:
         ans = ans and cond

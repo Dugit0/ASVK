@@ -2,8 +2,8 @@ from bs4 import BeautifulSoup
 import random
 import sys
 
-FILE = "input.xml" # Путь до файла с входными данными
-MAX_STEPS = 5000   # Максимальное число итераций алгоритма
+FILE = "test_16proc_1.xml"  # Путь до файла с входными данными
+MAX_STEPS = 5000  # Максимальное число итераций алгоритма
 
 
 def find_load(solution, links):
@@ -25,7 +25,7 @@ def cheсk(solution, proc_limits, prog_cap):
     # solution - найденное решение
     # proc_limits - список с предельными нагрузками на процессоры
     # prog_cap - список с нагрузками на процессор для каждой программы
-    
+
     proc_num = len(proc_limits)
     prog_num = len(prog_cap)
     cur_proc_limits = [0] * proc_num
@@ -35,6 +35,32 @@ def cheсk(solution, proc_limits, prog_cap):
         if cur_proc_limits[proc] > proc_limits[proc]:
             return False
     return True
+
+
+def gen_random_solution(proc_limits, prog_cap):
+    # Функция для генерации случайного решения
+    # proc_limits - список с предельными нагрузками на процессоры
+    # prog_cap - список с нагрузками на процессор для каждой программы
+
+    proc_num = len(proc_limits)
+    prog_num = len(prog_cap)
+    programs = list(range(prog_num))
+    random.shuffle(programs)
+    solution = [0] * prog_num
+    proc_ind = 0
+    prog_ind = 0
+    while proc_ind < proc_num:
+        cur_lim = 0
+        while prog_ind < prog_num:
+            cur_lim += prog_cap[programs[prog_ind]]
+            if cur_lim > proc_limits[proc_ind]:
+                cur_lim -= prog_cap[programs[prog_ind]]
+                break
+            else:
+                solution[programs[prog_ind]] = proc_ind
+                prog_ind += 1
+        proc_ind += 1
+    return solution
 
 
 # Открытие и считывание файла
@@ -96,14 +122,17 @@ links.sort(key=lambda a: a[0])
 best_load = sum(map(lambda a: a[2], links)) + 1
 best_solution = [-1] * prog_num
 
-global_count_steps = 0   # Глобальный счетчик итераций
-count_steps = 0          # Счетчик для подсчета итеграций между двумя найденными решениями
-flag_success = False     # Флаг нахождения решения
+global_count_steps = 0  # Глобальный счетчик итераций
+count_steps = 0  # Счетчик для подсчета итеграций между двумя найденными решениями
+flag_success = False  # Флаг нахождения решения
 while True:
     count_steps += 1
     global_count_steps += 1
     # Генерируем решение
-    new_solution = [random.randint(0, proc_num - 1) for i in range(prog_num)]
+    # Вариант 1: абсолютно случайная генерация процессора для каждой программы
+    # new_solution = [random.randint(0, proc_num - 1) for i in range(prog_num)]
+    # Вариант 2: случайная генерация программ для процессора с учетом предела нагрузки процессора
+    new_solution = gen_random_solution(proc_limits, prog_cap)
     # Считаем нагрузку
     new_load = find_load(new_solution, links)
     # Проверяем что найденное решение лучше известного
@@ -125,3 +154,5 @@ if flag_success:
 else:
     print("failure")
     print(global_count_steps)
+
+gen_random_solution(proc_limits, prog_cap)
